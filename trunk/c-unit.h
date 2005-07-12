@@ -31,22 +31,15 @@ Example:
         return c_unit_run() != 1;
     }
 
-It is also recommened to use the following scheme in your source files:
+It is also recommened to use the following scheme in your test files:
+    #include "c-unit.h"
+    #define TESTING
+    #include "t.c"
 
-    static int
-    do_something()
-    {
-        printf("working...\n");
+    <test code goes here>
 
-        return 1;
-    }
-
-    #ifdef TESTING
-    #include "tests/test_t.c"
-    #endif
-
-tests/test_t.c will contain the "main" function that adds this
-modules test functions and calls main.
+This way you'll be able to access static functions and variables as well.
+If you have a "main" in t.c then enclose it in #ifdef TESTING
 */
 
 /*
@@ -64,6 +57,9 @@ $Id: c-unit.h 972 2004-11-07 06:42:51Z mikit $
 #include <stdio.h>
 #include <setjmp.h>
 #include <stdarg.h>
+
+/* We don't need #ifdef __cplusplus since all the code is in the header file
+*/
 
 static int __c_unit_curr_test; /**< Current test */
 static jmp_buf __c_unit_err; /**< longjmp target */
